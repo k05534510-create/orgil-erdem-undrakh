@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Оргил Эрдэм Ундрах ХХК — Соёлыг төгөлдөршүүлнэ</title>
+<meta name="description" content="Оргил Эрдэм Ундрах ХХК — инженер суурьтай зөвлөхүүдийн баг. ISO менежментийн тогтолцооны зөвлөх үйлчилгээ, сургалт, баримт бичиг боловсруулалт, баталгаажуулалтын аудитын бэлтгэл. Соёлыг төгөлдөршүүлнэ." />
+<meta property="og:title" content="Оргил Эрдэм Ундрах ХХК" />
+<meta property="og:description" content="Эрдэм мэдлэгийг ундрааж, байгууллагыг тань амжилтын оргилд хүргэнэ." />
+<meta property="og:type" content="website" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/css/styles.css" />
+<link rel="icon" type="image/png" href="assets/img/favicon.png" />
+</head>
+<body>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav" id="nav">
+  <a class="brand" href="#top" aria-label="Оргил Эрдэм Ундрах — нүүр хуудас">
+    <img class="brand-mark" src="assets/img/logo-mark.png" alt="" aria-hidden="true" />
+    <span class="brand-text">
+      <span class="brand-name">Оргил Эрдэм Ундрах</span>
+      <span class="brand-sub">ХХК · OEU LLC</span>
+    </span>
+  </a>
+  <nav class="nav-links" id="navLinks" aria-label="Үндсэн цэс">
+    <a href="#about">Бидний тухай</a>
+    <a href="#ethos">Эрхэм зорилго</a>
+    <a href="#services">Үйлчилгээ</a>
+    <a href="#team">Баг</a>
+    <a class="nav-cta" href="#contact">Холбогдох</a>
+  </nav>
+  <button class="nav-toggle" id="navToggle" aria-label="Цэс нээх" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<main id="top">
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+  <div class="hero-bg"><img src="assets/img/hero.png" alt="Үүрийн гэгээнд туяарах уулын оргил" /></div>
+  <canvas class="hero-3d" id="heroCanvas" aria-hidden="true"></canvas>
+
+  <div class="hero-inner">
+    <span class="eyebrow hero-eyebrow">ISO менежментийн тогтолцооны зөвлөх үйлчилгээ</span>
+    <h1>
+      <span class="line"><span>Соёлыг</span></span>
+      <span class="line"><span><em>төгөлдөршүүлнэ.</em></span></span>
+    </h1>
+    <p class="hero-sub">Эрдэм мэдлэгийг ундрааж, хэрэглэгч байгууллагыг тань амжилтын оргилд хүргэх — инженер суурьтай зөвлөхүүдийн баг.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#contact">Зөвлөгөө авах <span class="arr">→</span></a>
+      <a class="btn btn-ghost" href="#services">Үйлчилгээтэй танилцах</a>
+    </div>
+  </div>
+
+  <div class="hero-meta">
+    <b>ОРГИЛ · 4000м+</b>
+    Амжилтын дээд цэг рүү<br>хөтлөх зам
+    <span class="hero-3d-hint">● Интерактив 3D · хулгана хөдөлгөнө үү</span>
+  </div>
+
+  <div class="scroll-cue"><span>Доош гүйлгэх</span><i></i></div>
+</section>
+
+<!-- ===================== STANDARDS MARQUEE ===================== -->
+<section class="standards" aria-label="Бидний мэргэшсэн стандартууд">
+  <div class="wrap">
+    <p class="standards-label">Бидний нутагшуулдаг олон улсын стандартууд<span class="standards-hint">Стандарт дээр дарж дэлгэрэнгүйг үзнэ үү</span></p>
+    <div class="marquee">
+      <div class="marquee-track">
+        <span>ISO 9001<span class="sr-only"></span></span><span>ISO 14001</span><span>ISO 45001</span><span>ISO 50001</span><span>ISO 22000</span><span>ISO 30400</span><span>GMP</span><span>GHP</span><span>ESRS</span><span>GRI</span>
+        <span aria-hidden="true">ISO 9001</span><span aria-hidden="true">ISO 14001</span><span aria-hidden="true">ISO 45001</span><span aria-hidden="true">ISO 50001</span><span aria-hidden="true">ISO 22000</span><span aria-hidden="true">ISO 30400</span><span aria-hidden="true">GMP</span><span aria-hidden="true">GHP</span><span aria-hidden="true">ESRS</span><span aria-hidden="true">GRI</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ABOUT ===================== -->
+<section class="about" id="about">
+  <div class="wrap about-grid">
+    <div class="about-copy">
+      <div class="section-head" style="margin-bottom:8px">
+        <span class="eyebrow" data-reveal>Бидний тухай</span>
+        <h2 class="section-title" data-reveal data-delay="1" style="margin-top:22px">Нэр маань <em>үндсэн зорилго</em> маань.</h2>
+      </div>
+      <p data-reveal data-delay="1"><span class="hl">Бид “эрдэм мэдлэгийг ундрааж, хэрэглэгч байгууллагыг амжилтын оргилд хүрэхэд тусална”</span> гэсэн үндсэн зорилгоо бодож байгууллагынхаа нэрийг өгсөн.</p>
+      <p data-reveal data-delay="2">Манай байгууллагын онцлог нь инженер суурьтай зөвлөхүүдтэй явдал — үйлдвэрлэлийн орчны оновчтой шийдэл, тухайн салбарын шаардлагад нийцэх инженерчлэл, процесс сайжруулалт дээр илүү гүн туршлагатай.</p>
+
+      <dl class="decode" data-reveal data-delay="2">
+        <div class="decode-row">
+          <dt>Оргил</dt>
+          <dd><b>Summit</b>Амжилтын дээд цэг — байгууллага хүрэхийг зорьдог чанарын тэргүүн эгнээ.</dd>
+        </div>
+        <div class="decode-row">
+          <dt>Эрдэм</dt>
+          <dd><b>Knowledge</b>Стандарт, арга зүй, инженерийн мэдлэг — өөрчлөлтийг авчрах хүч.</dd>
+        </div>
+        <div class="decode-row">
+          <dt>Ундрах</dt>
+          <dd><b>To spring forth</b>Мэдлэгийг тасралтгүй ундрааж, соёлыг өдөр бүр төгөлдөржүүлэх.</dd>
+        </div>
+      </dl>
+    </div>
+
+    <figure class="about-figure" data-reveal data-delay="1">
+      <img src="assets/img/about.png" alt="Инженер суурьтай зөвлөхүүд техникийн баримт бичиг хянаж буй нь" />
+      <span class="tag">Инженер суурьтай зөвлөхүүд</span>
+    </figure>
+  </div>
+</section>
+
+<!-- ===================== ETHOS ===================== -->
+<section class="ethos" id="ethos">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Эрхэмсэг оршихуй</span>
+      <h2 class="section-title" style="margin-top:22px">Бид юунд <em>итгэдэг</em> вэ.</h2>
+    </div>
+
+    <div class="ethos-grid">
+      <div class="ethos-statement" data-reveal data-delay="1">
+        <span class="k">Эрхэм зорилго</span>
+        <p class="v">Соёлыг төгөлдөршүүлнэ.</p>
+      </div>
+      <div class="ethos-statement" data-reveal data-delay="2">
+        <span class="k">Алсын хараа</span>
+        <p class="v">Монгол хүний чадамжийг дэлхийд үнэлүүлнэ.</p>
+      </div>
+
+      <div class="values" data-reveal data-delay="1">
+        <div class="value">
+          <span class="gx">Х</span>
+          <h3>Хариуцлага</h3>
+          <p>Амласан үр дүндээ эзэн болж, ажлынхаа чанарыг бид өөрсдөө баталгаажуулна.</p>
+        </div>
+        <div class="value">
+          <span class="gx">Х</span>
+          <h3>Хандлага</h3>
+          <p>Асуудлыг боломж болгон харж, хийж буй ажилдаа шинжлэх ухаанчаар ханддаг.</p>
+        </div>
+        <div class="value">
+          <span class="gx">Х</span>
+          <h3>Харилцаа</h3>
+          <p>Хэрэглэгчтэйгээ нээлттэй, ил тод харилцаж нэгдсэн ойлголтыг бий болгоно.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SERVICES — THE ASCENT ===================== -->
+<section class="ascent" id="services">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Манай үйлчилгээ — зөвлөх үйлчилгээний хүрээнд</span>
+      <h2 class="section-title" style="margin-top:22px">Стандартыг нэвтрүүлэх <em>бүтэн аялал</em>.</h2>
+      <p class="lead">Зөрүүг тогтоохоос баталгаажуулалтын аудит хүртэл — бид таны багтай хамт алхам бүрийг гарна. Доорх таван үе шат нь оргил руу хийх авиралт юм.</p>
+    </div>
+
+    <div class="ascent-layout">
+      <!-- drawing path rail -->
+      <div class="ascent-rail" aria-hidden="true">
+        <svg id="ascentSvg" preserveAspectRatio="none" viewBox="0 0 60 1000">
+          <path class="ascent-track" id="ascentTrack" d="M30 990 C 14 800, 46 720, 30 560 C 16 430, 44 330, 30 200 C 22 110, 36 70, 30 10" />
+          <path class="ascent-progress" id="ascentProgress" d="M30 990 C 14 800, 46 720, 30 560 C 16 430, 44 330, 30 200 C 22 110, 36 70, 30 10" />
+          <polygon class="ascent-flag" id="ascentFlag" points="30,4 44,12 30,20" />
+        </svg>
+      </div>
+
+      <div class="stages" id="stages">
+        <article class="stage" data-reveal>
+          <div class="stage-index"><span class="num">01</span><span class="alt">+1200м<span>Баазын бэлтгэл</span></span></div>
+          <div class="stage-body">
+            <h3>Зөрүүгийн шинжилгээ</h3>
+            <p>Одоогийн байгаа түвшинг тогтоож, бодит хэрэгцээг тодорхойлон, стандартад хүрэх нарийвчилсан төлөвлөгөөг гаргана.</p>
+            <p class="meta">Gap analysis · Одоогийн төлөв ба зорилтот төлөвийн зөрүү</p>
+          </div>
+        </article>
+
+        <article class="stage" data-reveal>
+          <div class="stage-index"><span class="num">02</span><span class="alt">+2100м<span>Авиралт эхэллээ</span></span></div>
+          <div class="stage-body">
+            <h3>Сургалт</h3>
+            <p>Стандартын шаардлагыг хэрхэн хангах талаар багт сургалт явуулж, бүх түвшинд нэгдсэн ойлголтыг бий болгоно.</p>
+            <p class="meta">Training · Мэдлэг шилжүүлэг ба чадавхжуулалт</p>
+          </div>
+        </article>
+
+        <article class="stage" data-reveal>
+          <div class="stage-index"><span class="num">03</span><span class="alt">+2900м<span>Дунд бэл</span></span></div>
+          <div class="stage-body">
+            <h3>Сайжруулалт ба нутагшуулалт</h3>
+            <p>Стандартын шаардлагыг байгууллагын онцлогт тохируулан нутагшуулж, одоо мөрдөж буй тогтолцоог бодитоор сайжруулна.</p>
+            <p class="meta">Improvement &amp; localization · Процесс сайжруулалт</p>
+          </div>
+        </article>
+
+        <article class="stage" data-reveal>
+          <div class="stage-index"><span class="num">04</span><span class="alt">+3500м<span>Оргилын бэл</span></span></div>
+          <div class="stage-body">
+            <h3>Баримт бичиг боловсруулах</h3>
+            <p>Стандартын шаардлага бүрээр баримт бичгүүдийг боловсруулж, байгууллагад хэрхэн нийцэж буй дээр хамтран хэлэлцэнэ.</p>
+            <p class="meta">Documentation · Тогтолцооны баримтжуулалт</p>
+          </div>
+        </article>
+
+        <article class="stage summit reached" data-reveal>
+          <div class="stage-index"><span class="num">05</span><span class="alt">+4000м<span>Оргил</span></span></div>
+          <div class="stage-body">
+            <h3>Аудит ба баталгаажуулалтын бэлтгэл</h3>
+            <p>Дотоод аудиторуудтай хамтран аудит хийж, илрүүлсэн зөрүүг арилгаж, баталгаажуулалтын аудитад бүрэн бэлтгэнэ.</p>
+            <p class="meta">Certification readiness · Баталгаажуулалтад бэлэн</p>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="ascent-cap" data-reveal>
+      <img src="assets/img/training.png" alt="Стандартын сургалт явуулж буй нь" />
+      <div class="veil">
+        <div class="wrap2">
+          <h3>Зөвхөн баримт бичиг биш — нэгдсэн ойлголт, тогтвортой соёл.</h3>
+          <p>Сургалт бол бидний хамгийн чухал үе шат. Багийн гишүүн бүр “яагаад” гэдгийг ойлгосон үед л стандарт бодитоор амьдардаг.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== STATS ===================== -->
+<section class="stats" aria-label="Тоон үзүүлэлт">
+  <div class="wrap">
+    <div class="stat" data-reveal><div class="n">70<sup>+</sup></div><div class="l">Хэрэгжүүлсэн зөвлөх төсөл</div></div>
+    <div class="stat" data-reveal data-delay="1"><div class="n">10<sup>+</sup></div><div class="l">Нутагшуулдаг олон улсын стандарт</div></div>
+    <div class="stat" data-reveal data-delay="2"><div class="n">9</div><div class="l">Зөвлөх үйлчилгээний салбар дахь жил</div></div>
+    <div class="stat" data-reveal data-delay="3"><div class="n">5</div><div class="l">Баталгаажуулалт хүртэлх үе шат</div></div>
+  </div>
+</section>
+
+<!-- ===================== TEAM ===================== -->
+<section class="team" id="team">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Манай менежментийн баг</span>
+      <h2 class="section-title" style="margin-top:22px">Инженер суурьтай <em>зөвлөхүүд</em>.</h2>
+      <p class="lead">Үйлдвэрлэлийн удирдлага, инженерчлэл, хүний нөөц болон процессын менежментийн салбарт бодит туршлага хуримтлуулсан мэргэжилтнүүд.</p>
+    </div>
+
+    <div class="team-grid">
+      <article class="member" data-reveal data-member="amarbayar">
+        <span class="member-more" aria-hidden="true">Дэлгэрэнгүй →</span>
+        <div class="avatar" aria-hidden="true">А</div>
+        <span class="role">Гүйцэтгэх захирал · CEO</span>
+        <h3>М.Амарбаяр</h3>
+        <p>Мехатроник инженер. Үйлдвэрлэлийн удирдлагын чиглэлээр өргөн туршлагатай.</p>
+        <div class="certs"><span>ISO 9001</span><span>ISO 14001</span><span>ISO 50001</span><span>GMP</span><span>GHP</span></div>
+      </article>
+
+      <article class="member" data-reveal data-delay="1" data-member="chantsalnyam">
+        <span class="member-more" aria-hidden="true">Дэлгэрэнгүй →</span>
+        <div class="avatar" aria-hidden="true">Ч</div>
+        <span class="role">Ерөнхий зөвлөх</span>
+        <h3>Ж.Чанцалням</h3>
+        <p>Хүний нөөцийн менежер. Процесс болон хүний нөөцийн үндсэн функцуудыг уялдуулан баримт бичиг боловсруулдаг.</p>
+        <div class="certs"><span>ISO 9001</span><span>ISO 30400</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CONTACT ===================== -->
+<section class="contact" id="contact">
+  <div class="contact-bg"><img src="assets/img/summit.png" alt="Үүрийн гэгээнд оргил дээр зогсох дүр" /></div>
+  <div class="wrap">
+    <div class="contact-inner">
+      <div class="contact-lead">
+        <span class="eyebrow" data-reveal>Бидэнтэй холбогдох</span>
+        <h2 class="section-title" data-reveal data-delay="1">Таны байгууллагын дараагийн <em>үе шат</em> эндээс эхэлнэ.</h2>
+        <p class="lead" data-reveal data-delay="2">Зөрүүгийн шинжилгээний анхны уулзалт — таны одоогийн төлөв, зорилтот стандартыг хамтдаа тодорхойлъё.</p>
+      </div>
+
+      <div class="contact-card" data-reveal data-delay="1">
+        <h3>Холбоо барих</h3>
+        <ul class="contact-list">
+          <li>
+            <span class="ic" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"/></svg>
+            </span>
+            <div><span class="k">Утас</span><a class="val" href="tel:+97690085757">9008 5757</a></div>
+          </li>
+          <li>
+            <span class="ic" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="4.5" width="19" height="15" rx="2"/><path d="m3 6 9 7 9-7"/></svg>
+            </span>
+            <div><span class="k">Имэйл</span><a class="val" href="mailto:infooeullc@gmail.com">infooeullc@gmail.com</a></div>
+          </li>
+          <li>
+            <span class="ic" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </span>
+            <div><span class="k">Хаяг</span><span class="val">Хан-Уул дүүрэг, Чингисийн өргөн чөлөө,<br>Порта Бианка, 18 тоот</span></div>
+          </li>
+        </ul>
+        <a class="btn btn-primary" href="mailto:infooeullc@gmail.com?subject=Зөвлөгөө%20авах%20хүсэлт">Зөвлөгөө хүсэх <span class="arr">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img class="footer-logo" src="assets/img/logo-light.png" alt="Оргил Эрдэм Ундрах ХХК — Соёлыг төгөлдөршүүлнэ" />
+      </div>
+      <div class="footer-col">
+        <h4>Цэс</h4>
+        <a href="#about">Бидний тухай</a>
+        <a href="#ethos">Эрхэм зорилго</a>
+        <a href="#services">Үйлчилгээ</a>
+        <a href="#team">Менежментийн баг</a>
+      </div>
+      <div class="footer-col">
+        <h4>Холбоо барих</h4>
+        <a href="tel:+97690085757">9008 5757</a>
+        <a href="mailto:infooeullc@gmail.com">infooeullc@gmail.com</a>
+        <p>Хан-Уул дүүрэг, Чингисийн өргөн чөлөө, Порта Бианка, 18 тоот</p>
+      </div>
+    </div>
+    <div class="footer-bot">
+      <span>© 2026 Оргил Эрдэм Ундрах ХХК. Бүх эрх хуулиар хамгаалагдсан.</span>
+      <span>OEU LLC · ISO Management Systems Consulting</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ===================== MODAL ===================== -->
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-label="Дэлгэрэнгүй мэдээлэл">
+    <button class="modal-close" type="button" data-close aria-label="Хаах">&times;</button>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/scene.js"></script>
+<script src="assets/js/modal.js"></script>
+</body>
+</html>
