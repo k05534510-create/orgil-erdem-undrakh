@@ -114,7 +114,9 @@
     var canvas = document.getElementById("bgCanvas"); if (!canvas) return;
     var renderer;
     try { renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true }); } catch (e) { return; }
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    var lite = (window.matchMedia("(max-width: 820px)").matches || window.matchMedia("(pointer: coarse)").matches || (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 4);
+    document.body.classList.add(lite ? "world-lite" : "world-full");
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, lite ? 1.3 : 2));
     renderer.outputEncoding = THREE.sRGBEncoding;
     renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.95;
     var W = window.innerWidth, H = window.innerHeight; renderer.setSize(W, H, false);
@@ -135,7 +137,7 @@
         }, undefined, function () { loadHDR(urls, i + 1); });
       } catch (e) {}
     }
-    loadHDR([
+    if (!lite) loadHDR([
       "https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/textures/equirectangular/venice_sunset_1k.hdr",
       "https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/textures/equirectangular/royal_esplanade_1k.hdr"
     ], 0);
@@ -197,7 +199,7 @@
     }
 
     /* motes */
-    var N = 460, parr = new Float32Array(N * 3);
+    var N = lite ? 220 : 460, parr = new Float32Array(N * 3);
     for (var p = 0; p < N; p++) { parr[p * 3] = (Math.random() - 0.5) * 72; parr[p * 3 + 1] = (Math.random() - 0.5) * 46; parr[p * 3 + 2] = (Math.random() - 0.5) * 52; }
     var pgeo = new THREE.BufferGeometry(); pgeo.setAttribute("position", new THREE.BufferAttribute(parr, 3));
     var motes = new THREE.Points(pgeo, new THREE.PointsMaterial({ color: 0xF2CA7E, size: 0.12, transparent: true, opacity: 0.5, depthWrite: false, blending: THREE.AdditiveBlending }));
@@ -269,7 +271,7 @@
     /* real bloom post-processing (cinematic glow); falls back to plain render */
     var composer = null;
     try {
-      if (THREE.EffectComposer && THREE.RenderPass && THREE.UnrealBloomPass) {
+      if (!lite && THREE.EffectComposer && THREE.RenderPass && THREE.UnrealBloomPass) {
         composer = new THREE.EffectComposer(renderer);
         composer.setPixelRatio(renderer.getPixelRatio());
         composer.setSize(W, H);
@@ -289,9 +291,18 @@
     }
 
     var running = true, t0 = performance.now();
+    var fpsN = 0, fpsT = 0, downgraded = false;
     function frame(now) {
       if (!running) return;
       var t = (now - t0) / 1000;
+      if (!downgraded && !lite) {
+        fpsN++;
+        if (fpsN === 20) fpsT = now;
+        else if (fpsN === 100) {
+          var fps = 80000 / (now - fpsT);
+          if (fps < 42) { downgraded = true; composer = null; renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.3)); resize(); document.body.classList.remove("world-full"); document.body.classList.add("world-lite"); }
+        }
+      }
       place();
       star.rotation.y = t * 0.3; star.rotation.x = Math.sin(t * 0.4) * 0.12;
       core.scale.setScalar(1 + Math.sin(t * 2) * 0.07);
