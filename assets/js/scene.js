@@ -116,7 +116,7 @@
     try { renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true }); } catch (e) { return; }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.outputEncoding = THREE.sRGBEncoding;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.16;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.02;
     var W = window.innerWidth, H = window.innerHeight; renderer.setSize(W, H, false);
     document.body.classList.add("has-world");
 
@@ -124,19 +124,21 @@
     var scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(INK, 0.024);
     scene.environment = makeEnvTexture(renderer);
-    // upgrade to a real HDRI for lifelike metal reflections (async; procedural stays as fallback)
-    if (THREE.RGBELoader) {
+    // upgrade to a real HDRI for lifelike, warm golden reflections (async; procedural stays as fallback)
+    function loadHDR(urls, i) {
+      if (!THREE.RGBELoader || i >= urls.length) return;
       try {
-        new THREE.RGBELoader().load(
-          "https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/textures/equirectangular/royal_esplanade_1k.hdr",
-          function (hdr) {
-            hdr.mapping = THREE.EquirectangularReflectionMapping;
-            var pm = new THREE.PMREMGenerator(renderer); pm.compileEquirectangularShader();
-            scene.environment = pm.fromEquirectangular(hdr).texture; hdr.dispose();
-          }, undefined, function () {}
-        );
+        new THREE.RGBELoader().load(urls[i], function (hdr) {
+          hdr.mapping = THREE.EquirectangularReflectionMapping;
+          var pm = new THREE.PMREMGenerator(renderer); pm.compileEquirectangularShader();
+          scene.environment = pm.fromEquirectangular(hdr).texture; hdr.dispose();
+        }, undefined, function () { loadHDR(urls, i + 1); });
       } catch (e) {}
     }
+    loadHDR([
+      "https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/textures/equirectangular/venice_sunset_1k.hdr",
+      "https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/textures/equirectangular/royal_esplanade_1k.hdr"
+    ], 0);
 
     var camera = new THREE.PerspectiveCamera(52, W / H, 0.1, 240);
 
@@ -155,10 +157,10 @@
       emissive: 0x4a3410, emissiveIntensity: 0.4
     }));
     star.position.set(0, 4.2, 0); world.add(star);
-    var core = new THREE.Mesh(new THREE.IcosahedronGeometry(0.9, 2), new THREE.MeshBasicMaterial({ color: 0xfff3d6 }));
+    var core = new THREE.Mesh(new THREE.IcosahedronGeometry(0.55, 2), new THREE.MeshBasicMaterial({ color: 0xfff0cf }));
     core.position.copy(star.position); world.add(core);
     var halo = new THREE.Sprite(new THREE.SpriteMaterial({
-      map: radialSprite([[0, "rgba(255,224,150,0.85)"], [0.25, "rgba(240,190,110,0.4)"], [1, "rgba(226,178,92,0)"]]),
+      map: radialSprite([[0, "rgba(255,224,150,0.5)"], [0.25, "rgba(240,190,110,0.22)"], [1, "rgba(226,178,92,0)"]]),
       transparent: true, depthWrite: false, blending: THREE.AdditiveBlending
     }));
     halo.scale.set(16, 16, 1); halo.position.copy(star.position); world.add(halo);
@@ -221,8 +223,21 @@
       lastX = e.clientX; lastY = e.clientY;
     }, { passive: true });
 
+    var servicesEl = document.getElementById("services");
     function place() {
       var kf = sampleKF(window.scrollY / docH());
+      // "climb the mountain" while scrolling through the services section
+      if (servicesEl) {
+        var r = servicesEl.getBoundingClientRect(), vh = window.innerHeight;
+        if (r.top < vh && r.bottom > 0 && r.height > 0) {
+          var sp = clamp((vh * 0.85 - r.top) / r.height, 0, 1);          // ascent progress
+          var center = clamp(1 - Math.abs((r.top + r.height / 2) - vh / 2) / (vh * 0.5 + r.height * 0.5), 0, 1);
+          var cp = [lerp(-6, 2.5, sp), lerp(-1.5, 9, sp), lerp(19, 9.5, sp)];   // base camp → summit
+          var cl = [0, lerp(-2, 5, sp), -2];                                     // look up toward the summit star
+          kf.p[0] = lerp(kf.p[0], cp[0], center); kf.p[1] = lerp(kf.p[1], cp[1], center); kf.p[2] = lerp(kf.p[2], cp[2], center);
+          kf.l[0] = lerp(kf.l[0], cl[0], center); kf.l[1] = lerp(kf.l[1], cl[1], center); kf.l[2] = lerp(kf.l[2], cl[2], center);
+        }
+      }
       cX += (pX - cX) * 0.05; cY += (pY - cY) * 0.05;
       camera.position.set(kf.p[0] + cX * 3.5, kf.p[1] - cY * 2.0, kf.p[2]);
       camera.lookAt(kf.l[0], kf.l[1], kf.l[2]);
@@ -259,7 +274,7 @@
         composer.setPixelRatio(renderer.getPixelRatio());
         composer.setSize(W, H);
         composer.addPass(new THREE.RenderPass(scene, camera));
-        composer.addPass(new THREE.UnrealBloomPass(new THREE.Vector2(W, H), 0.52, 0.6, 0.85));
+        composer.addPass(new THREE.UnrealBloomPass(new THREE.Vector2(W, H), 0.42, 0.62, 0.9));
       }
     } catch (e) { composer = null; }
     function renderFrame() { if (composer) composer.render(); else renderFrame(); }
