@@ -124,6 +124,19 @@
     var scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(INK, 0.024);
     scene.environment = makeEnvTexture(renderer);
+    // upgrade to a real HDRI for lifelike metal reflections (async; procedural stays as fallback)
+    if (THREE.RGBELoader) {
+      try {
+        new THREE.RGBELoader().load(
+          "https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/textures/equirectangular/royal_esplanade_1k.hdr",
+          function (hdr) {
+            hdr.mapping = THREE.EquirectangularReflectionMapping;
+            var pm = new THREE.PMREMGenerator(renderer); pm.compileEquirectangularShader();
+            scene.environment = pm.fromEquirectangular(hdr).texture; hdr.dispose();
+          }, undefined, function () {}
+        );
+      } catch (e) {}
+    }
 
     var camera = new THREE.PerspectiveCamera(52, W / H, 0.1, 240);
 
@@ -138,7 +151,7 @@
 
     /* gold compass-star */
     var star = new THREE.Mesh(makeStarGeometry(), new THREE.MeshPhysicalMaterial({
-      color: 0xE9BB5E, metalness: 1.0, roughness: 0.17, clearcoat: 0.6, clearcoatRoughness: 0.25,
+      color: 0xE9BB5E, metalness: 1.0, roughness: 0.12, clearcoat: 0.7, clearcoatRoughness: 0.16,
       emissive: 0x4a3410, emissiveIntensity: 0.4
     }));
     star.position.set(0, 4.2, 0); world.add(star);
@@ -152,12 +165,12 @@
 
     /* clickable gold ISO coins */
     var coins = [];
-    var rimMat = new THREE.MeshStandardMaterial({ color: 0xC9A24B, metalness: 1.0, roughness: 0.32 });
+    var rimMat = new THREE.MeshStandardMaterial({ color: 0xC9A24B, metalness: 1.0, roughness: 0.26 });
     for (var k = 0; k < STANDARDS.length; k++) {
       var code = STANDARDS[k];
       var geo = new THREE.CylinderGeometry(0.95, 0.95, 0.17, 64, 1);
       geo.rotateX(Math.PI / 2);   // faces point ±Z
-      var faceMat = new THREE.MeshStandardMaterial({ map: coinTexture(code), metalness: 0.65, roughness: 0.34 });
+      var faceMat = new THREE.MeshStandardMaterial({ map: coinTexture(code), metalness: 0.7, roughness: 0.3 });
       var coin = new THREE.Mesh(geo, [rimMat, faceMat, faceMat]);
       coin.userData = {
         code: code, radius: 6.4 + (k % 3) * 2.0, baseAngle: (k / STANDARDS.length) * Math.PI * 2,
@@ -167,14 +180,17 @@
       world.add(coin); coins.push(coin);
     }
 
-    /* decorative gems */
+    /* decorative polished gemstones (high-detail, clearcoat) */
     var gems = [];
-    var gemMat = new THREE.MeshStandardMaterial({ color: 0xCBA14B, metalness: 1.0, roughness: 0.28 });
-    for (var gi = 0; gi < 6; gi++) {
-      var gm = new THREE.Mesh(new THREE.OctahedronGeometry(0.42, 0), gemMat);
-      var ga = Math.random() * 6.28, gr = 9 + Math.random() * 5;
-      gm.position.set(Math.cos(ga) * gr, Math.random() * 8 - 4, Math.sin(ga) * gr - 3);
-      gm.userData = { sp: 0.4 + Math.random(), ph: Math.random() * 6.28, baseY: gm.position.y };
+    var gemGeo = new THREE.IcosahedronGeometry(0.5, 1);
+    var gemGold = new THREE.MeshPhysicalMaterial({ color: 0xDCAE57, metalness: 1.0, roughness: 0.1, clearcoat: 0.85, clearcoatRoughness: 0.12 });
+    var gemJade = new THREE.MeshPhysicalMaterial({ color: 0x1f6b4e, metalness: 0.35, roughness: 0.07, clearcoat: 1.0, clearcoatRoughness: 0.08 });
+    for (var gi = 0; gi < 9; gi++) {
+      var gm = new THREE.Mesh(gemGeo, gi % 3 === 0 ? gemJade : gemGold);
+      var ga = Math.random() * 6.28, gr = 8 + Math.random() * 6;
+      gm.scale.setScalar(0.55 + Math.random() * 0.8);
+      gm.position.set(Math.cos(ga) * gr, Math.random() * 9 - 4.5, Math.sin(ga) * gr - 3);
+      gm.userData = { sp: 0.3 + Math.random() * 0.8, ph: Math.random() * 6.28, baseY: gm.position.y };
       world.add(gm); gems.push(gm);
     }
 
@@ -232,14 +248,27 @@
       if (c && window.OEU && window.OEU.openIso) window.OEU.openIso(c.userData.code);
     });
 
-    function resize() { W = window.innerWidth; H = window.innerHeight; renderer.setSize(W, H, false); camera.aspect = W / H; camera.updateProjectionMatrix(); }
+    function resize() { W = window.innerWidth; H = window.innerHeight; renderer.setSize(W, H, false); if (composer) composer.setSize(W, H); camera.aspect = W / H; camera.updateProjectionMatrix(); }
     window.addEventListener("resize", resize, { passive: true });
+
+    /* real bloom post-processing (cinematic glow); falls back to plain render */
+    var composer = null;
+    try {
+      if (THREE.EffectComposer && THREE.RenderPass && THREE.UnrealBloomPass) {
+        composer = new THREE.EffectComposer(renderer);
+        composer.setPixelRatio(renderer.getPixelRatio());
+        composer.setSize(W, H);
+        composer.addPass(new THREE.RenderPass(scene, camera));
+        composer.addPass(new THREE.UnrealBloomPass(new THREE.Vector2(W, H), 0.52, 0.6, 0.85));
+      }
+    } catch (e) { composer = null; }
+    function renderFrame() { if (composer) composer.render(); else renderFrame(); }
 
     if (reduce) {
       place();
       coins.forEach(function (c) { var d = c.userData; c.position.set(Math.cos(d.baseAngle) * d.radius, d.y, Math.sin(d.baseAngle) * d.radius - 2); c.lookAt(camera.position); });
-      renderer.render(scene, camera);
-      window.addEventListener("scroll", function () { place(); renderer.render(scene, camera); }, { passive: true });
+      renderFrame();
+      window.addEventListener("scroll", function () { place(); renderFrame(); }, { passive: true });
       return;
     }
 
@@ -262,7 +291,7 @@
       }
       for (var j = 0; j < gems.length; j++) { var gm = gems[j], gd = gm.userData; gm.rotation.x += 0.01 * gd.sp; gm.rotation.y += 0.014 * gd.sp; gm.position.y = gd.baseY + Math.sin(t * gd.sp + gd.ph) * 0.6; }
       motes.rotation.y = t * 0.009;
-      renderer.render(scene, camera);
+      renderFrame();
       requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);
