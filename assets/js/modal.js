@@ -141,6 +141,10 @@
     }
   });
 
+  // expose so the 3D coins (scene.js) can open the same ISO popup
+  window.OEU = window.OEU || {};
+  window.OEU.openIso = function (code) { var h = isoHtml(code); if (h) open(h); };
+
   if (document.readyState !== "loading") markChips();
   else document.addEventListener("DOMContentLoaded", markChips);
 })();
