@@ -116,7 +116,7 @@
     try { renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true }); } catch (e) { return; }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.outputEncoding = THREE.sRGBEncoding;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.02;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.95;
     var W = window.innerWidth, H = window.innerHeight; renderer.setSize(W, H, false);
     document.body.classList.add("has-world");
 
@@ -142,10 +142,10 @@
 
     var camera = new THREE.PerspectiveCamera(52, W / H, 0.1, 240);
 
-    scene.add(new THREE.HemisphereLight(0x44664e, 0x06140e, 0.85));
-    var key = new THREE.DirectionalLight(0xffd98c, 1.7); key.position.set(9, 14, 9); scene.add(key);
+    scene.add(new THREE.HemisphereLight(0x44664e, 0x06140e, 1.05));
+    var key = new THREE.DirectionalLight(0xffd98c, 1.05); key.position.set(9, 14, 9); scene.add(key);
     var fill = new THREE.DirectionalLight(0x5b9c80, 0.55); fill.position.set(-13, 6, -4); scene.add(fill);
-    var starLight = new THREE.PointLight(0xffcf8a, 1.3, 70, 2); starLight.position.set(0, 5, 7); scene.add(starLight);
+    var starLight = new THREE.PointLight(0xffcf8a, 0.85, 70, 2); starLight.position.set(0, 5, 7); scene.add(starLight);
 
     var world = new THREE.Group(); scene.add(world);
     world.add(makeMountain());
@@ -153,8 +153,8 @@
 
     /* gold compass-star */
     var star = new THREE.Mesh(makeStarGeometry(), new THREE.MeshPhysicalMaterial({
-      color: 0xE9BB5E, metalness: 1.0, roughness: 0.12, clearcoat: 0.7, clearcoatRoughness: 0.16,
-      emissive: 0x4a3410, emissiveIntensity: 0.4
+      color: 0xD9B36A, metalness: 1.0, roughness: 0.42, clearcoat: 0.2, clearcoatRoughness: 0.4,
+      envMapIntensity: 0.55, emissive: 0x3a2a0c, emissiveIntensity: 0.28
     }));
     star.position.set(0, 4.2, 0); world.add(star);
     var core = new THREE.Mesh(new THREE.IcosahedronGeometry(0.55, 2), new THREE.MeshBasicMaterial({ color: 0xfff0cf }));
@@ -167,12 +167,12 @@
 
     /* clickable gold ISO coins */
     var coins = [];
-    var rimMat = new THREE.MeshStandardMaterial({ color: 0xC9A24B, metalness: 1.0, roughness: 0.26 });
+    var rimMat = new THREE.MeshStandardMaterial({ color: 0xC9A24B, metalness: 1.0, roughness: 0.46, envMapIntensity: 0.5 });
     for (var k = 0; k < STANDARDS.length; k++) {
       var code = STANDARDS[k];
       var geo = new THREE.CylinderGeometry(0.95, 0.95, 0.17, 64, 1);
       geo.rotateX(Math.PI / 2);   // faces point ±Z
-      var faceMat = new THREE.MeshStandardMaterial({ map: coinTexture(code), metalness: 0.7, roughness: 0.3 });
+      var faceMat = new THREE.MeshStandardMaterial({ map: coinTexture(code), metalness: 0.6, roughness: 0.52, envMapIntensity: 0.45 });
       var coin = new THREE.Mesh(geo, [rimMat, faceMat, faceMat]);
       coin.userData = {
         code: code, radius: 6.4 + (k % 3) * 2.0, baseAngle: (k / STANDARDS.length) * Math.PI * 2,
@@ -184,9 +184,9 @@
 
     /* decorative polished gemstones (high-detail, clearcoat) */
     var gems = [];
-    var gemGeo = new THREE.IcosahedronGeometry(0.5, 1);
-    var gemGold = new THREE.MeshPhysicalMaterial({ color: 0xDCAE57, metalness: 1.0, roughness: 0.1, clearcoat: 0.85, clearcoatRoughness: 0.12 });
-    var gemJade = new THREE.MeshPhysicalMaterial({ color: 0x1f6b4e, metalness: 0.35, roughness: 0.07, clearcoat: 1.0, clearcoatRoughness: 0.08 });
+    var gemGeo = new THREE.IcosahedronGeometry(0.5, 2);
+    var gemGold = new THREE.MeshPhysicalMaterial({ color: 0xCBA45A, metalness: 1.0, roughness: 0.4, clearcoat: 0.25, clearcoatRoughness: 0.4, envMapIntensity: 0.5 });
+    var gemJade = new THREE.MeshPhysicalMaterial({ color: 0x1f6b4e, metalness: 0.3, roughness: 0.35, clearcoat: 0.4, clearcoatRoughness: 0.3, envMapIntensity: 0.5 });
     for (var gi = 0; gi < 9; gi++) {
       var gm = new THREE.Mesh(gemGeo, gi % 3 === 0 ? gemJade : gemGold);
       var ga = Math.random() * 6.28, gr = 8 + Math.random() * 6;
@@ -274,7 +274,7 @@
         composer.setPixelRatio(renderer.getPixelRatio());
         composer.setSize(W, H);
         composer.addPass(new THREE.RenderPass(scene, camera));
-        composer.addPass(new THREE.UnrealBloomPass(new THREE.Vector2(W, H), 0.42, 0.62, 0.9));
+        composer.addPass(new THREE.UnrealBloomPass(new THREE.Vector2(W, H), 0.2, 0.6, 0.93));
       }
     } catch (e) { composer = null; }
     function renderFrame() { if (composer) composer.render(); else renderFrame(); }
