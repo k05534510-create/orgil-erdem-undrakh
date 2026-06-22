@@ -88,25 +88,25 @@
       if (i === 0) shape.moveTo(x, y); else shape.lineTo(x, y);
     }
     shape.closePath();
-    var geo = new THREE.ExtrudeGeometry(shape, { depth: 0.6, bevelEnabled: true, bevelThickness: 0.26, bevelSize: 0.26, bevelSegments: 4, steps: 1 });
+    var geo = new THREE.ExtrudeGeometry(shape, { depth: 0.6, bevelEnabled: true, bevelThickness: 0.26, bevelSize: 0.26, bevelSegments: 8, steps: 2 });
     geo.center(); geo.computeVertexNormals(); return geo;
   }
 
   /* ---------- gold ISO coin face texture ---------- */
   function coinTexture(code) {
-    var s = 320, c = document.createElement("canvas"); c.width = c.height = s; var g = c.getContext("2d");
+    var s = 1024, c = document.createElement("canvas"); c.width = c.height = s; var g = c.getContext("2d");
     var rg = g.createRadialGradient(s * 0.40, s * 0.36, s * 0.08, s / 2, s / 2, s * 0.55);
     rg.addColorStop(0, "#f6dca0"); rg.addColorStop(0.45, "#d2ac5a"); rg.addColorStop(1, "#8a6a2c");
-    g.fillStyle = rg; g.beginPath(); g.arc(s / 2, s / 2, s / 2 - 3, 0, 7); g.fill();
-    g.lineWidth = 12; g.strokeStyle = "rgba(86,62,22,0.65)"; g.beginPath(); g.arc(s / 2, s / 2, s / 2 - 16, 0, 7); g.stroke();
-    g.lineWidth = 4; g.strokeStyle = "rgba(255,240,205,0.55)"; g.beginPath(); g.arc(s / 2, s / 2, s / 2 - 26, 0, 7); g.stroke();
+    g.fillStyle = rg; g.beginPath(); g.arc(s / 2, s / 2, s / 2 - s * 0.01, 0, 7); g.fill();
+    g.lineWidth = s * 0.037; g.strokeStyle = "rgba(86,62,22,0.65)"; g.beginPath(); g.arc(s / 2, s / 2, s / 2 - s * 0.05, 0, 7); g.stroke();
+    g.lineWidth = s * 0.012; g.strokeStyle = "rgba(255,240,205,0.55)"; g.beginPath(); g.arc(s / 2, s / 2, s / 2 - s * 0.081, 0, 7); g.stroke();
     g.fillStyle = "#3c2d0d"; g.textAlign = "center"; g.textBaseline = "middle";
     var parts = code.split(" ");
     if (parts.length === 2) {
-      g.font = "bold 60px Arial, sans-serif"; g.fillText(parts[0], s / 2, s / 2 - 36);
-      g.font = "bold 78px Arial, sans-serif"; g.fillText(parts[1], s / 2, s / 2 + 40);
-    } else { g.font = "bold 86px Arial, sans-serif"; g.fillText(code, s / 2, s / 2); }
-    var t = new THREE.CanvasTexture(c); t.anisotropy = 8; return t;
+      g.font = "bold " + (s * 0.19).toFixed(0) + "px Arial, sans-serif"; g.fillText(parts[0], s / 2, s / 2 - s * 0.112);
+      g.font = "bold " + (s * 0.245).toFixed(0) + "px Arial, sans-serif"; g.fillText(parts[1], s / 2, s / 2 + s * 0.125);
+    } else { g.font = "bold " + (s * 0.27).toFixed(0) + "px Arial, sans-serif"; g.fillText(code, s / 2, s / 2); }
+    var t = new THREE.CanvasTexture(c); t.anisotropy = 16; return t;
   }
 
   function initWorld() {
@@ -170,7 +170,7 @@
     var rimMat = new THREE.MeshStandardMaterial({ color: 0xC9A24B, metalness: 1.0, roughness: 0.46, envMapIntensity: 0.5 });
     for (var k = 0; k < STANDARDS.length; k++) {
       var code = STANDARDS[k];
-      var geo = new THREE.CylinderGeometry(0.95, 0.95, 0.17, 64, 1);
+      var geo = new THREE.CylinderGeometry(0.95, 0.95, 0.17, 96, 1);
       geo.rotateX(Math.PI / 2);   // faces point ±Z
       var faceMat = new THREE.MeshStandardMaterial({ map: coinTexture(code), metalness: 0.6, roughness: 0.52, envMapIntensity: 0.45 });
       var coin = new THREE.Mesh(geo, [rimMat, faceMat, faceMat]);
@@ -184,7 +184,7 @@
 
     /* decorative polished gemstones (high-detail, clearcoat) */
     var gems = [];
-    var gemGeo = new THREE.IcosahedronGeometry(0.5, 2);
+    var gemGeo = new THREE.IcosahedronGeometry(0.5, 3);
     var gemGold = new THREE.MeshPhysicalMaterial({ color: 0xCBA45A, metalness: 1.0, roughness: 0.4, clearcoat: 0.25, clearcoatRoughness: 0.4, envMapIntensity: 0.5 });
     var gemJade = new THREE.MeshPhysicalMaterial({ color: 0x1f6b4e, metalness: 0.3, roughness: 0.35, clearcoat: 0.4, clearcoatRoughness: 0.3, envMapIntensity: 0.5 });
     for (var gi = 0; gi < 9; gi++) {
@@ -275,6 +275,7 @@
         composer.setSize(W, H);
         composer.addPass(new THREE.RenderPass(scene, camera));
         composer.addPass(new THREE.UnrealBloomPass(new THREE.Vector2(W, H), 0.2, 0.6, 0.93));
+        if (THREE.SMAAPass) composer.addPass(new THREE.SMAAPass(W * renderer.getPixelRatio(), H * renderer.getPixelRatio()));
       }
     } catch (e) { composer = null; }
     function renderFrame() { if (composer) composer.render(); else renderFrame(); }
