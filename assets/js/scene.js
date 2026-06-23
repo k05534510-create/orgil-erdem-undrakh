@@ -280,7 +280,7 @@
         if (THREE.SMAAPass) composer.addPass(new THREE.SMAAPass(W * renderer.getPixelRatio(), H * renderer.getPixelRatio()));
       }
     } catch (e) { composer = null; }
-    function renderFrame() { if (composer) composer.render(); else renderFrame(); }
+    function renderFrame() { if (composer) composer.render(); else renderer.render(scene, camera); }
 
     if (reduce) {
       place();
